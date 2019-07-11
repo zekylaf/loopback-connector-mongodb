@@ -1032,6 +1032,16 @@ describe('mongodb connector', function() {
   });
 
   describe('updateAll', function() {
+    it('should preserve the id', async function() {
+      let user = await User.create({name: 'Al', age: 31, email: 'al@strongloop'});
+      const userId = user.id;
+      user = user.toObject();
+      user.age = 100;
+
+      await User.update(user);
+      user.should.have.property('id', userId);
+    });
+
     it('should update the instance matching criteria', function(done) {
       User.create({name: 'Al', age: 31, email: 'al@strongloop'}, function(
         err1,
